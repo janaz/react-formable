@@ -2,22 +2,27 @@
 import React, { PropTypes } from 'react';
 import MD  from './md';
 
-
 export default function Subsection(props) {
     const {
         title='',
-        markdown,
+        markdown='',
         link,
         subSections=[],
         code: Code
     } = props;
 
+    const [firstMD, ...restMD] = markdown
+                                    .split('{{code}}')
+                                    .map((m, i) => <MD text={m} key={i} />);
+    const content = Code ?
+        [firstMD, <Code key="code" />, ...restMD] :
+        [firstMD, ...restMD];
+
     return <div id={link} className="subsection">
-        {title && title.length && <h3>{title}</h3>}
+        {title && title.length && <h2>{title}</h2>}
 
-        {markdown && <MD text={markdown} />}
+        {content}
 
-        {Code && <Code />}
         {subSections.map((subSection) => {
             return <Subsection key={subSection.link} {...subSection} />;
         })}
@@ -29,9 +34,6 @@ Subsection.propTypes = {
     id: PropTypes.string,
     link: PropTypes.string,
     markdown: PropTypes.string,
-    code: PropTypes.oneOfType([
-        PropTypes.node,
-        PropTypes.func
-    ]),
+    code: PropTypes.func,
     subSections: PropTypes.array
 };
