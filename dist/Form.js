@@ -100,7 +100,7 @@ class _Form extends React.Component {
                 }
             });
         };
-        this.onKeyDown = (e) => e.key === 'Enter' && this.onSubmit(e);
+        this.onKeyDown = (e) => e.key === 'Enter' && e.target.type !== 'textarea' && this.onSubmit(e);
         this.onSubmit = (e) => {
             e.preventDefault();
             // No one is expecting work, no need to validate
